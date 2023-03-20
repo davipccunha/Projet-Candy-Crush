@@ -63,15 +63,22 @@ class Board:
         for position in candies_chain:
             self.candies[position[0]][position[1]] = None
 
-    # Not working properly
     def drop_columns(self, columns_indexes):
         for index in columns_indexes:
             column = commons.get_column(self, index)
-            for candy in column:
-                print(candy.color if candy is not None else 'None', end=' ')
-            print()
             column.sort(key=lambda candy: candy is not None)
-            for candy in column:
-                print(candy.color if candy is not None else 'None', end=' ')
-            print()
             commons.set_column(self, index, column)
+
+    def regenerate_candies(self):
+        regenerated_candies = []
+
+        for i, row in enumerate(self.candies):
+            for j, candy in enumerate(row):
+                if candy is None:
+                    new_candy = Candy(random.choice(COLORS), (i, j))
+                    self.candies[i][j] = new_candy
+                    regenerated_candies.append(new_candy)
+
+        return regenerated_candies
+    
+    
